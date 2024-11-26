@@ -3,10 +3,9 @@ package Lab2.Prob2A;
 public class Student {
     private String name;
     private GradeReport report;
-    public Student(String nm) {
-        name = nm;
+    public Student(String stuName) {
+        name = stuName;
         report = new GradeReport(this);
-
     }
     public String getName() {
         return name;

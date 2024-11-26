@@ -4,9 +4,8 @@ public class GradeReport implements Comparable<GradeReport> {
     private Student student;
     private String grade;
 
-    //package level access
-    GradeReport(Student st) {
-        student = st;
+    GradeReport(Student stu) {
+        student = stu;
     }
     public void setGrade(String g) {
         grade = g;
