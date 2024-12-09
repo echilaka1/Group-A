@@ -1,0 +1,109 @@
+package LibrarySystem;
+import javax.swing.*;
+
+import LibrarySystem.Model.Data;
+import LibrarySystem.Model.User;
+import LibrarySystem.Model.Util;
+
+import java.awt.*;
+import java.util.HashMap;
+import java.util.List;
+
+public class LibraryApp {
+
+    private static JFrame frame;
+    private static JPanel loginPanel;
+    private static JTextField usernameField;
+    private static JPasswordField passwordField;
+    private static JComboBox<String> roleComboBox;
+    private static HashMap<String, String> userRoles = new HashMap<>(); // St
+    public static void main(String[] args) {
+        userRoles.put("librarian", "Librarian");
+        userRoles.put("admin", "Admin");
+        userRoles.put("adminlibrarian", "Admin,Librarian");
+
+        SwingUtilities.invokeLater(LibraryApp::createAndShowLogin);
+    }
+
+    // Create and display the login page
+    private static void createAndShowLogin() {
+        frame = new JFrame("Library Management System");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(800, 600);  // Increased the size to accommodate the image
+        frame.setLocationRelativeTo(null); // Center the window
+
+        // Login Panel
+        loginPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        // Add an image at the top
+        JLabel imageLabel = new JLabel();
+        ImageIcon icon = new ImageIcon("src/LibrarySystem/resources/loto.png");
+        imageLabel.setIcon(icon);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        loginPanel.add(imageLabel, gbc);
+        gbc.gridwidth = 1;
+
+        // Username
+        JLabel usernameLabel = new JLabel("Username:");
+        usernameField = new JTextField(20);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        loginPanel.add(usernameLabel, gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        loginPanel.add(usernameField, gbc);
+
+        // Password
+        JLabel passwordLabel = new JLabel("Password:");
+        passwordField = new JPasswordField(20);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        loginPanel.add(passwordLabel, gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        loginPanel.add(passwordField, gbc);
+
+        // Login button
+        JButton loginButton = new JButton("Login");
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        loginPanel.add(loginButton, gbc);
+
+        // ActionListener for login button
+        addLoginButtonListener(loginButton);
+
+        frame.getContentPane().add(loginPanel);
+        frame.setVisible(true);
+    }
+
+    private static void addLoginButtonListener(JButton butn) {
+        butn.addActionListener(evt -> {
+            String user = usernameField.getText().trim();
+            String pwd = new String(passwordField.getPassword()).trim();
+
+            if (user.length() == 0 || pwd.length() == 0) {
+                JOptionPane.showMessageDialog(frame, "Invalid credentials. Please try again.", "Login Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                List<User> list = Data.logins;
+                User login = new User(user, pwd, null);
+                User u = Util.findUser(list, login);
+                if (u == null) {
+                    JOptionPane.showMessageDialog(frame, "Invalid credentials. Please try again.", "Login Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    Data.currentAuth = u.authorization;
+
+                    Dashboard.createAdminDashboard(Data.currentAuth.toString());
+                    frame.dispose();
+                }
+            }
+        });
+    }
+}
