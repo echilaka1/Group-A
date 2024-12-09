@@ -39,15 +39,15 @@ public class LibraryApp {
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // Add an image at the top
-        JLabel imageLabel = new JLabel();
-        ImageIcon icon = new ImageIcon("src/LibrarySystem/resources/loto.png");
-        imageLabel.setIcon(icon);
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
-        loginPanel.add(imageLabel, gbc);
-        gbc.gridwidth = 1;
+//        JLabel imageLabel = new JLabel();
+//        ImageIcon icon = new ImageIcon("src/LibrarySystem/resources/loto.png");
+//        imageLabel.setIcon(icon);
+//        gbc.gridx = 0;
+//        gbc.gridy = 0;
+//        gbc.gridwidth = 2;
+//        gbc.anchor = GridBagConstraints.CENTER;
+//        loginPanel.add(imageLabel, gbc);
+//        gbc.gridwidth = 1;
 
         // Username
         JLabel usernameLabel = new JLabel("Username:");
