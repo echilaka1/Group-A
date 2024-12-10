@@ -46,7 +46,7 @@ public class ManageMembersPage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String searchText = searchField.getText().toLowerCase();
-                filterLibraryMembers(searchText);
+                filterBooks(searchText);
             }
         });
     }
@@ -72,41 +72,49 @@ public class ManageMembersPage {
         }
     }
 
-    public List<LibraryMember> filterLibraryMembers(String firstName) {
-        List<LibraryMember> filteredList = new ArrayList<>();
-        for (LibraryMember member : dummyMembers) {
-            if (member.getFirstName().equalsIgnoreCase(firstName)) {
-                filteredList.add(member);
-            }
-        }
-        return filteredList;
-    }
-
     private void filterBooks(String searchText) {
+        // Clear the table model to reset the table
         tableModel.setRowCount(0);
 
-//        String[][] dummyMembers = {
-//                {"1", "Johaan", "Scheuta", "1011 N Street", "Fairfield", "IOWA", "55656", "6551122445"},
-//                {"2", "Silvia", "Cort", "1011 Burlington Avenue", "Fairfield", "IOWA", "55656", "6551122445"},
-//                {"3", "Sylvia", "Baken", "929 Westchester Drive", "Fairfield", "IOWA", "55656", "6551122445"},
-//        };
+        // If search text is empty, reload all members
+        if (searchText.isEmpty()) {
+            for (LibraryMember member : dummyMembers) {
+                addMemberToTable(member);
+            }
+            return;
+        }
 
-//        List<LibraryMember> members = LibraryMemberDAO.getAllMembers();
-//        LibraryMember[] dummyMembers = members.toArray(new LibraryMember[0]);
+        // Filter members based on the search text
+        for (LibraryMember member : dummyMembers) {
+            boolean matchesSearch = member.getFirstName().toLowerCase().contains(searchText) ||
+                    member.getLastName().toLowerCase().contains(searchText) ||
+                    member.getAddress().getStreet().toLowerCase().contains(searchText) ||
+                    member.getAddress().getCity().toLowerCase().contains(searchText) ||
+                    member.getAddress().getState().toLowerCase().contains(searchText) ||
+                    member.getAddress().getZip().contains(searchText) ||
+                    member.getPhone().contains(searchText);
 
-//        for (LibraryMember member : dummyMembers) {
-//            boolean matchesSearch = false;
-//            for (String field : member) {
-//                if (field.toLowerCase().contains(searchText)) {
-//                    matchesSearch = true;
-//                    break;
-//                }
-//            }
-//            if (matchesSearch) {
-//                tableModel.addRow(member);
-//            }
-//        }
+            if (matchesSearch) {
+                addMemberToTable(member);
+            }
+        }
     }
+
+    // Helper method to add a library member to the table
+    private void addMemberToTable(LibraryMember member) {
+        String[] row = new String[] {
+                String.valueOf(member.getMemberId()),
+                member.getFirstName(),
+                member.getLastName(),
+                member.getAddress().getStreet(),
+                member.getAddress().getCity(),
+                member.getAddress().getState(),
+                member.getAddress().getZip(),
+                member.getPhone()
+        };
+        tableModel.addRow(row);
+    }
+
 
     public JPanel getPanel() {
         return panel;
