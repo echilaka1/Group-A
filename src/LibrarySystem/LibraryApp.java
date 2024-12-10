@@ -1,6 +1,8 @@
 package LibrarySystem;
+
 import javax.swing.*;
 
+import LibrarySystem.Business.UserFactory;
 import LibrarySystem.Model.Data;
 import LibrarySystem.Model.User;
 import LibrarySystem.Model.Util;
@@ -17,11 +19,12 @@ public class LibraryApp {
     private static JPasswordField passwordField;
     private static JComboBox<String> roleComboBox;
     private static HashMap<String, String> userRoles = new HashMap<>(); // St
+
     public static void main(String[] args) {
         userRoles.put("librarian", "Librarian");
         userRoles.put("admin", "Admin");
         userRoles.put("adminlibrarian", "Admin,Librarian");
-
+        UserFactory.createTestUsers();
         SwingUtilities.invokeLater(LibraryApp::createAndShowLogin);
     }
 
@@ -29,7 +32,7 @@ public class LibraryApp {
     private static void createAndShowLogin() {
         frame = new JFrame("Library Management System");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);  // Increased the size to accommodate the image
+        frame.setSize(800, 600); // Increased the size to accommodate the image
         frame.setLocationRelativeTo(null); // Center the window
 
         // Login Panel
@@ -78,20 +81,25 @@ public class LibraryApp {
             String user = usernameField.getText().trim();
             String pwd = new String(passwordField.getPassword()).trim();
 
-            if (user.length() == 0 || pwd.length() == 0) {
-                JOptionPane.showMessageDialog(frame, "Invalid credentials. Please try again.", "Login Error", JOptionPane.ERROR_MESSAGE);
-            } else {
-                List<User> list = Data.logins;
-                User login = new User(user, pwd, null);
-                User u = Util.findUser(list, login);
-                if (u == null) {
-                    JOptionPane.showMessageDialog(frame, "Invalid credentials. Please try again.", "Login Error", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    Data.currentAuth = u.authorization;
+            if (user.isEmpty() || pwd.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "Username and password cannot be empty", "Login Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
+            try {
+                User loggedInUser = UserFactory.login(user, pwd);
+                if (loggedInUser != null) {
+                    Data.currentAuth = loggedInUser.authorization;
                     Dashboard.createAdminDashboard(Data.currentAuth.toString());
                     frame.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Invalid credentials. Please try again.", "Login Error",
+                            JOptionPane.ERROR_MESSAGE);
                 }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(frame, "Login error: " + e.getMessage(), "Login Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
     }
