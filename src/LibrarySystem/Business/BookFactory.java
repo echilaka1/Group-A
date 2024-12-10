@@ -41,7 +41,7 @@ public class BookFactory {
         return "Book copy " + availableCopy.getCopyNumber() + " checked out successfully.";
     }
 
-    public static String addBook(String isbn, String title, List<Author> authors, int maxCheckoutLength, int numOfCopies) {
+    public static String addBook(String title, String isbn, List<Author> authors, int maxCheckoutLength, int numOfCopies) {
     	StorageManager manager = new DataAccessFacade();
     	Map<String, Book> booksMap = manager.readBooksFromStorage();
         

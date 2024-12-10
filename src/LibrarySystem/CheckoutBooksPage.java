@@ -1,7 +1,10 @@
 package LibrarySystem;
 
 import LibrarySystem.Business.BookFactory;
+import LibrarySystem.Business.CheckoutRecordFactory;
 import LibrarySystem.Model.Address;
+import LibrarySystem.Model.BookCopy;
+import LibrarySystem.Model.CheckoutEntry;
 
 import javax.swing.*;
 import java.awt.*;
@@ -59,8 +62,15 @@ public class CheckoutBooksPage {
         btn.addActionListener(evt -> {
             String isbn = isbnField.getText().trim();
             String memberID = memberIdField.getText().trim();
+            int number = Integer.parseInt(memberID);
 
-            var res = BookFactory.checkoutBook(isbn, memberID);
+            var getBook = BookFactory.findBookByIsbn(isbn);
+
+            BookCopy newBookCopy = new BookCopy(getBook);
+
+            CheckoutEntry newEntry = new CheckoutEntry(newBookCopy);
+
+            var res = CheckoutRecordFactory.addCheckoutEntry(number, newEntry);
             messageLabel.setText(res);
 
             isbnField.setText("");

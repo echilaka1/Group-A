@@ -5,16 +5,18 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import LibrarySystem.DataAccess.DataAccessFacade;
 import LibrarySystem.DataAccess.StorageManager;
 import LibrarySystem.Model.BookCopy;
 import LibrarySystem.Model.CheckoutEntry;
 import LibrarySystem.Model.CheckoutRecord;
+import LibrarySystem.Model.LibraryMember;
 
 
 public class CheckoutRecordFactory {
-    public static void addCheckoutEntry(int memberId, CheckoutEntry entry) {
+    public static String addCheckoutEntry(int memberId, CheckoutEntry entry) {
     	StorageManager manager = new DataAccessFacade();
         Map<Integer, CheckoutRecord> recordsMap = manager.readCheckoutRecordsFromStorage();
 
@@ -23,6 +25,8 @@ public class CheckoutRecordFactory {
         
         recordsMap.put(memberId, record);
         manager.saveCheckoutRecordsToStorage(recordsMap);
+
+        return  "checked out successfully";
     }
     
     public static CheckoutRecord getCheckoutRecord(int memberId) {
@@ -39,6 +43,7 @@ public class CheckoutRecordFactory {
         }
         return Collections.unmodifiableMap(recordsMap);
     }
+
     
     public static List<BookCopy> getOverdueBooks() {
         List<BookCopy> overdueBooks = new ArrayList<>();

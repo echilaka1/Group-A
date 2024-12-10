@@ -31,6 +31,14 @@ public class CheckoutEntry implements Serializable {
     	return bookCopy;
     }
 
+    public Date getDueDate() {
+        return dueDate;
+    }
+
+    public Date getCheckoutDate() {
+        return checkoutDate;
+    }
+
     private Date calculateDueDate(int maxCheckoutLength) {
     	 if (maxCheckoutLength <= 0) {
              throw new IllegalArgumentException("Max checkout length must be greater than 0.");

@@ -56,7 +56,7 @@ public class DataAccessFacade implements StorageManager {
     
 	@SuppressWarnings("unchecked")
     public Map<Integer, CheckoutRecord> readCheckoutRecordsFromStorage() {
-        Object records = readFromStorage(StorageType.CHECKOUTRECORDS);
+        Object records = DataAccessFacade.readFromStorage(StorageType.CHECKOUTRECORDS);
         if (records != null) {
             return (Map<Integer, CheckoutRecord>) records;
         }
@@ -64,7 +64,7 @@ public class DataAccessFacade implements StorageManager {
     }
 
     public void saveCheckoutRecordsToStorage(Map<Integer, CheckoutRecord> checkoutRecords) {
-        saveToStorage(StorageType.CHECKOUTRECORDS, checkoutRecords);
+		DataAccessFacade.saveToStorage(StorageType.CHECKOUTRECORDS, checkoutRecords);
     }
     
     @SuppressWarnings("unchecked")
