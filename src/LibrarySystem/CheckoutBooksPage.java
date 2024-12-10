@@ -64,11 +64,9 @@ public class CheckoutBooksPage {
             String memberID = memberIdField.getText().trim();
             int number = Integer.parseInt(memberID);
 
-            var getBook = BookFactory.findBookByIsbn(isbn);
+            var getBook = BookFactory.getAvailableCopy(isbn);
 
-            BookCopy newBookCopy = new BookCopy(getBook);
-
-            CheckoutEntry newEntry = new CheckoutEntry(newBookCopy);
+            CheckoutEntry newEntry = new CheckoutEntry(getBook);
 
             var res = CheckoutRecordFactory.addCheckoutEntry(number, newEntry);
             messageLabel.setText(res);

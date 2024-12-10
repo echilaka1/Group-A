@@ -84,27 +84,37 @@ public class ViewBooksPage {
     private void filterBooks(String searchText) {
         tableModel.setRowCount(0);
 
-        String[][] dummyBooks = {
-                {"Effective Java", "978-0134685991", "Joshua Bloch", "Available"},
-                {"Clean Code", "978-0132350884", "Robert C. Martin", "Checked Out"},
-                {"Design Patterns", "978-0201633610", "Erich Gamma", "Available"},
-                {"The Pragmatic Programmer", "978-0201616224", "Andrew Hunt", "Available"},
-                {"Head First Java", "978-0596009205", "Kathy Sierra", "Checked Out"}
-        };
-
-        for (String[] book : dummyBooks) {
-            boolean matchesSearch = false;
-            for (String field : book) {
-                if (field.toLowerCase().contains(searchText)) {
-                    matchesSearch = true;
-                    break;
-                }
+        if (searchText.isEmpty()) {
+            for (Book book : allBooks) {
+                addBookToTable(book);
             }
+            return;
+        }
+
+        for (Book book : allBooks) {
+            boolean matchesSearch = book.getTitle().toLowerCase().contains(searchText) ||
+                    book.getIsbn().toLowerCase().contains(searchText) ||
+                    book.getAuthors().toString().toLowerCase().contains(searchText) ||
+                    String.valueOf(book.getCopies().size()).contains(searchText) ||
+                    String.valueOf(book.getMaxCheckoutLength()).contains(searchText);
+
             if (matchesSearch) {
-                tableModel.addRow(book);
+                addBookToTable(book);
             }
         }
     }
+
+    private void addBookToTable(Book book) {
+        String[] row = new String[] {
+                book.getTitle(),
+                book.getIsbn(),
+                book.getAuthors().toString(),
+                String.valueOf(book.getCopies().size()),
+                String.valueOf(book.getMaxCheckoutLength())
+        };
+        tableModel.addRow(row);
+    }
+
 
     public JPanel getPanel() {
         return panel;

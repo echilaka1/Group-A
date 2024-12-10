@@ -29,18 +29,6 @@ public class BookFactory {
                 .orElseThrow(() -> new IllegalArgumentException("No available copy for the book with ISBN: " + isbn));
     }
 
-    public static String checkoutBook(String isbn, String memberId) {
-        BookCopy availableCopy = getAvailableCopy(isbn);
-        availableCopy.setAvailability(false);
-
-        StorageManager manager = new DataAccessFacade();
-        Map<String, Book> booksMap = manager.readBooksFromStorage();
-        booksMap.put(isbn, availableCopy.getBook());
-        manager.saveBooksToStorage(booksMap);
-
-        return "Book copy " + availableCopy.getCopyNumber() + " checked out successfully.";
-    }
-
     public static String addBook(String title, String isbn, List<Author> authors, int maxCheckoutLength, int numOfCopies) {
     	StorageManager manager = new DataAccessFacade();
     	Map<String, Book> booksMap = manager.readBooksFromStorage();
@@ -73,15 +61,7 @@ public class BookFactory {
             throw new IllegalArgumentException("Book with ISBN " + isbn + " not found.");
         }
     }
-    
-    public static Optional<Book> getBookByIsbn(String isbn) {
-    	StorageManager manager = new DataAccessFacade();
-        Map<String, Book> booksMap = manager.readBooksFromStorage();
-        return booksMap.values().stream()
-                .filter(book -> book.getIsbn().equals(isbn))
-                .findFirst();
-    }
-    
+
     public static List<Book> getAllBooks() {
     	StorageManager manager = new DataAccessFacade();
         Map<String, Book> booksMap = manager.readBooksFromStorage();
