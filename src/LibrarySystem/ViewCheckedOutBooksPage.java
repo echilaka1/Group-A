@@ -31,11 +31,10 @@ public class ViewCheckedOutBooksPage {
 
         JLabel searchLabel = new JLabel("Search:");
         JTextField searchField = new JTextField(20);
-        searchField.setToolTipText("Search by book name or member ID");
         inputPanel.add(searchLabel);
         inputPanel.add(searchField);
 
-        JLabel helpText = new JLabel("search by book title or Member id only");
+        JLabel helpText = new JLabel("search by ISBN, book title or Member id only");
         helpText.setFont(new Font(helpText.getFont().getName(), Font.ITALIC, 10));
         helpText.setForeground(Color.GRAY);
 
@@ -52,7 +51,7 @@ public class ViewCheckedOutBooksPage {
         searchPanel.add(buttonPanel, BorderLayout.EAST);
         panel.add(searchPanel, BorderLayout.NORTH);
         // Create the table for book listing
-        String[] columnNames = { "Book Title", "Checkout Date", "Due Date", "Is Overdue", "Member ID" };
+        String[] columnNames = { "ISBN", "Book Title", "Checkout Date", "Due Date", "Is Overdue", "Member ID" };
         tableModel = new DefaultTableModel(columnNames, 0);
 
         loadCheckoutRecords();
@@ -75,11 +74,12 @@ public class ViewCheckedOutBooksPage {
             public void actionPerformed(ActionEvent e) {
                 // print the table to console
                 for (int i = 0; i < tableModel.getRowCount(); i++) {
-                    System.out.println("Book Title: " + tableModel.getValueAt(i, 0) +
-                            ", Checkout Date: " + tableModel.getValueAt(i, 1) +
-                            ", Due Date: " + tableModel.getValueAt(i, 2) +
-                            ", Is Overdue: " + tableModel.getValueAt(i, 3) +
-                            ", Member ID: " + tableModel.getValueAt(i, 4));
+                    System.out.println(
+                            "ISBN: " + tableModel.getValueAt(i, 0) + "Book Title: " + tableModel.getValueAt(i, 1) +
+                                    ", Checkout Date: " + tableModel.getValueAt(i, 2) +
+                                    ", Due Date: " + tableModel.getValueAt(i, 3) +
+                                    ", Is Overdue: " + tableModel.getValueAt(i, 4) +
+                                    ", Member ID: " + tableModel.getValueAt(i, 5));
                 }
             }
         });
@@ -90,6 +90,7 @@ public class ViewCheckedOutBooksPage {
         for (Map.Entry<Integer, CheckoutRecord> entry : records.entrySet()) {
             for (CheckoutEntry checkoutEntry : entry.getValue().getCheckoutEntries()) {
                 String[] row = new String[] {
+                        checkoutEntry.getBookCopy().getBook().getIsbn(),
                         checkoutEntry.getBookCopy().getBook().getTitle(),
                         checkoutEntry.getCheckoutDate().toString(),
                         checkoutEntry.getDueDate().toString(),
@@ -111,16 +112,18 @@ public class ViewCheckedOutBooksPage {
         List<String[]> filteredRows = new ArrayList<>();
 
         for (int i = 0; i < tableModel.getRowCount(); i++) {
-            String bookTitle = tableModel.getValueAt(i, 0).toString().toLowerCase();
-            String memberId = tableModel.getValueAt(i, 4).toString().toLowerCase();
+            String isbn = tableModel.getValueAt(i, 0).toString().toLowerCase();
+            String bookTitle = tableModel.getValueAt(i, 1).toString().toLowerCase();
+            String memberId = tableModel.getValueAt(i, 5).toString().toLowerCase();
 
-            if (bookTitle.contains(searchText) || memberId.contains(searchText)) {
+            if (memberId.contains(searchText) || isbn.contains(searchText) || bookTitle.contains(searchText)) {
                 filteredRows.add(new String[] {
                         tableModel.getValueAt(i, 0).toString(),
                         tableModel.getValueAt(i, 1).toString(),
                         tableModel.getValueAt(i, 2).toString(),
                         tableModel.getValueAt(i, 3).toString(),
-                        tableModel.getValueAt(i, 4).toString()
+                        tableModel.getValueAt(i, 4).toString(),
+                        tableModel.getValueAt(i, 5).toString()
                 });
             }
         }
