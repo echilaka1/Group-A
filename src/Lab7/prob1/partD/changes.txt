@@ -1,0 +1,4 @@
+- Equals method: Updated the signature to override equals(Object) properly and added null checks.
+- HashCode method: Implemented the hashCode() method in line with the equals() method.
+- Inclusion of 'visited': Removed visited from the equals and hashCode logic, as it should not be used for duplicate detection.
+- Safety checks: In removeDuplicates(), avoided assuming a non-empty list when accessing elements.
