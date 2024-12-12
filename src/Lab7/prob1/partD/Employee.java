@@ -4,45 +4,58 @@ public class Employee {
 	private String name;
 	private int salary;
 	private boolean visited = false;
-	
+
 	public Employee(String name, int salary) {
 		this.name = name;
 		this.salary = salary;
 	}
-	
+
 	public void setVisited(boolean b) {
 		visited = b;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public int getSalary() {
 		return salary;
 	}
+
 	public void setSalary(int salary) {
 		this.salary = salary;
 	}
-	@Override 
+
+	@Override
 	public String toString() {
 		return "(" + name + ", " + salary + ")";
 	}
 
+	// Fix: Equals method should accept Object and not check the 'visited' field for
+	// equality
 	@Override
 	public boolean equals(Object ob) {
-		if(ob == null) return false;
-		if(!(ob instanceof Employee)) return false;
-		Employee emp = (Employee)ob;
+		if (ob == null)
+			return false;
+		if (!(ob instanceof Employee))
+			return false;
+		Employee emp = (Employee) ob;
+		// Excluding 'visited'
 		return emp.name.equals(name) && emp.salary == salary;
 	}
+
 	@Override
 	public int hashCode() {
 		int result = 17;
-		long longval = Double.doubleToLongBits(salary); int salaryHash = (int) (longval ^ (longval >>> 32)); result += 31 * result + name.hashCode();
+		long longval = Double.doubleToLongBits(salary);
+		int salaryHash = (int) (longval ^ (longval >>> 32));
+		result += 31 * result + name.hashCode();
 		result += 31 * result + salaryHash;
+		// Fix: Exclude 'visited' from the hashCode to align with equals logic
 		return result;
 	}
 }
