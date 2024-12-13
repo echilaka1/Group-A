@@ -1,4 +1,4 @@
-package Lab9.prob2;
+package prob2;
 
 import java.util.*;
 import java.time.LocalDate;

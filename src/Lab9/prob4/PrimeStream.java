@@ -1,4 +1,4 @@
-package Lab9.prob4;
+package prob4;
 
 import java.util.stream.Stream;
 
