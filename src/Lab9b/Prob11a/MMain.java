@@ -22,7 +22,13 @@ public class MMain {
 		// $100,000 and whose last name begins with any of the letters in the alphabet
 		// past the
 		// letter ‘M’ (so, any letters in the range ‘N’– ‘Z’).
-		System.out.println("helo");
+		System.out.println(
+				emps.stream()
+						.filter(e -> e.getSalary() > 100000)
+						.filter(e -> e.getLastName().charAt(0) > 'M')
+						.map(e -> e.getFirstName() + " " + e.getLastName())
+						.sorted()
+						.collect(Collectors.joining(", ")));
 
 	}
 
