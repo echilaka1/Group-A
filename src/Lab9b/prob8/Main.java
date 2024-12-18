@@ -5,7 +5,6 @@ public class Main {
 	List<OrderItem> orderItems = new ArrayList<>();
 
 	public static void main(String[] args) {
-		Main m = new Main();
 		m.loadOrderItemData();
 		System.out.println("Do any of these Order Items have an order of flowers? " +
 				m.findProduct("Flowers"));
