@@ -1,0 +1,19 @@
+Tom Jones
+    reportedBy: Corazza
+    classname: Circle
+    description: computePerimeter incorrect
+    severity: 0
+
+    reportedBy: Corazza
+    classname: ClosedCurve
+    description: 
+    severity: 1
+
+
+Joe Smith
+    reportedBy: Corazza
+    classname: Rectangle
+    description: computePerimeter incorrect
+    severity: 2
+
+
